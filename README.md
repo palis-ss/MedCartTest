@@ -1,4 +1,4 @@
-# MedCartTest
+# MedCart Protocol Test
 
 ### Requirements
 - .NET 6.0
