@@ -35,6 +35,7 @@
             groupBox1 = new GroupBox();
             btnOpenDrawer = new Button();
             numSpinner1 = new NumericUpDown();
+            label2 = new Label();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numSpinner1).BeginInit();
             SuspendLayout();
@@ -44,9 +45,9 @@
             label1.AutoSize = true;
             label1.Location = new Point(87, 54);
             label1.Name = "label1";
-            label1.Size = new Size(29, 15);
+            label1.Size = new Size(60, 15);
             label1.TabIndex = 5;
-            label1.Text = "Port";
+            label1.Text = "Serial Port";
             // 
             // btnConnect
             // 
@@ -61,7 +62,7 @@
             // cbPort
             // 
             cbPort.FormattingEnabled = true;
-            cbPort.Location = new Point(140, 51);
+            cbPort.Location = new Point(153, 50);
             cbPort.Name = "cbPort";
             cbPort.Size = new Size(121, 23);
             cbPort.TabIndex = 4;
@@ -106,11 +107,21 @@
             numSpinner1.TabIndex = 9;
             numSpinner1.Value = new decimal(new int[] { 1, 0, 0, 0 });
             // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(104, 272);
+            label2.Name = "label2";
+            label2.Size = new Size(66, 15);
+            label2.TabIndex = 10;
+            label2.Text = "Drawer No.";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(476, 450);
+            ClientSize = new Size(476, 394);
+            Controls.Add(label2);
             Controls.Add(numSpinner1);
             Controls.Add(btnOpenDrawer);
             Controls.Add(groupBox1);
@@ -118,7 +129,7 @@
             Controls.Add(btnConnect);
             Controls.Add(cbPort);
             Name = "Form1";
-            Text = "Form1";
+            Text = "MedCart Protocol Test";
             FormClosing += Form1_FormClosing;
             Load += Form1_Load;
             groupBox1.ResumeLayout(false);
@@ -137,5 +148,6 @@
         private GroupBox groupBox1;
         private Button btnOpenDrawer;
         private NumericUpDown numSpinner1;
+        private Label label2;
     }
 }
