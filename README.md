@@ -1,8 +1,8 @@
 # MedCart Protocol Test
 
 ### Requirements
-- .NET 6.0
-- Packages *System.IO.Ports* and *EasyModbusTCP.NETCore*
+- .NET 7.0
+- Packages *System.IO.Ports* and *NModbus4.NetCore*
 
 ### Description
 This project shows how to interface the MedCart using Modbus RTU protocol.  This is NOT a full function project.  That is, it can only do the following:

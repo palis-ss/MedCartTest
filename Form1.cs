@@ -1,12 +1,13 @@
 using System.Diagnostics;
 using System.IO.Ports;
-using EasyModbus;  // EasyModbusTCP.NETCore
+using Modbus.Device;  // NModbus4.NetCore by Hakan FISTIK
 
 namespace MedCartTest
 {
     public partial class Form1 : Form
     {
-        ModbusClient modbus = new();
+        static SerialPort serialPort = new();
+        ModbusSerialMaster master = ModbusSerialMaster.CreateRtu(serialPort);  // create modbus master
 
         public Form1()
         {
@@ -31,9 +32,9 @@ namespace MedCartTest
         {
             try
             {
-                if (modbus.Connected)
+                if (serialPort.IsOpen)
                 {
-                    modbus.Disconnect();
+                    serialPort.Close();
 
                     btnConnect.Text = "Connect";
                     cbPort.Enabled = true;
@@ -43,20 +44,19 @@ namespace MedCartTest
                 else
                 {
                     // set serial port parameters
-                    modbus.SerialPort = cbPort.Text;  // read port name from CB
-                    modbus.Baudrate = 19200;
-                    modbus.Parity = Parity.None;
-                    modbus.StopBits = StopBits.One;
-                    modbus.UnitIdentifier = 1;  // slave address
-                    modbus.NumberOfRetries = 2;  // set no of retries so it's won't take too long to respond
-                    
-                    modbus.Connect();
+                    serialPort.PortName = cbPort.Text;  // read port name from CB
+                    serialPort.BaudRate = 19200;
+                    serialPort.DataBits = 8;
+                    serialPort.Parity = Parity.None;
+                    serialPort.StopBits = StopBits.One;
+
+                    serialPort.Open();
 
                     btnConnect.Text = "Disconnect";
                     cbPort.Enabled = false;
 
                     // Example how to read registers (read board and firmware version)
-                    int[] regs = modbus.ReadInputRegisters(40, 2);  // Read input register address 40, 2 words
+                    ushort[] regs = master.ReadInputRegisters(1, 40, 2);  // Read input register address 40, 2 words
                     byte[] ver0 = BitConverter.GetBytes(regs[0]);
                     byte[] ver1 = BitConverter.GetBytes(regs[1]);
                     string boardver = ver0[1].ToString() + "." + ver0[0].ToString();
@@ -87,10 +87,10 @@ namespace MedCartTest
         // Close serial port before exit
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (modbus.Connected)
+            if (serialPort.IsOpen)
             {
                 Debug.WriteLine("Closing serial port before exit");
-                modbus.Disconnect();
+                serialPort.Close();
             }
         }
 
@@ -99,10 +99,10 @@ namespace MedCartTest
         {
             try
             {
-                if (modbus.Connected)
+                if (serialPort.IsOpen)
                 {
                     ushort drawerno = decimal.ToUInt16(numSpinner1.Value);
-                    modbus.WriteSingleRegister(1, (ushort)(1 << (drawerno - 1)));  // Write a holding register address 1
+                    master.WriteSingleRegister(1, 1, (ushort)(1 << (drawerno - 1)));  // Write a holding register address 1
                 }
                 else
                     MessageBox.Show("Port not open");
