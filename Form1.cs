@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using System.IO.Ports;
 using Modbus.Device;  // NModbus4.NetCore by Hakan FISTIK
+using Modbus.Extensions.Enron;
 
 namespace MedCartTest
 {
@@ -40,6 +41,7 @@ namespace MedCartTest
                     cbPort.Enabled = true;
 
                     lbInfo.Text = "-";
+                    timer1.Enabled = false;
                 }
                 else
                 {
@@ -62,6 +64,8 @@ namespace MedCartTest
                     string boardver = ver0[1].ToString() + "." + ver0[0].ToString();
                     string fwver = ver1[1].ToString() + "." + ver1[0].ToString();
                     lbInfo.Text = "Board: " + boardver + "\nFirmware: " + fwver;
+
+                    timer1.Enabled = true;
                 }
             }
             catch (Exception ex)
@@ -89,6 +93,7 @@ namespace MedCartTest
         {
             if (serialPort.IsOpen)
             {
+                timer1.Enabled = false;
                 Debug.WriteLine("Closing serial port before exit");
                 serialPort.Close();
             }
@@ -111,6 +116,55 @@ namespace MedCartTest
             {
                 MessageBox.Show(ex.Message);
             }
+        }
+
+        private void timer1_Tick(object sender, EventArgs e)
+        {
+            ushort[] d = master.ReadInputRegisters(1, 52, 1);
+            ushort nibble1 = (ushort)(d[0] >> 8);
+            ushort nibble0 = (ushort)(d[0] & 0xFF);
+            double vbatt = (double)nibble1 + (double)nibble0 * 0.01;
+            lblBattInfo.Text = string.Format("Batt level: {0}V", vbatt.ToString("N2"));
+        }
+
+        private void btnSendVolt_Click(object sender, EventArgs e)
+        {
+            double.TryParse(txtVoltage.Text, out double value);
+            master.WriteSingleRegister(1, 100, (ushort)(value * 100));
+
+            System.Threading.Thread.Sleep(100);
+            btnFetchBattCal_Click(sender, e);  // refresh value
+        }
+
+        private void btnFetchBattCal_Click(object sender, EventArgs e)
+        {
+            ushort[] d = master.ReadInputRegisters(1, 102, 1);
+            lblBattRecords.Text = string.Format("Number of Records: {0}", d[0]);
+
+            if (d[0] > 0)
+            {
+                ushort[] x = master.ReadHoldingRegisters(1, 110, d[0]);
+                ushort[] y = master.ReadHoldingRegisters(1, 120, d[0]);
+
+                for (int i = 0; i < d[0]; i++)
+                {
+                    lblBattRecords.Text += string.Format("\n{0}  {1}", x[i], y[i]);
+                }
+            }
+
+            d = master.ReadHoldingRegisters(1, 103, 1);
+            chkEnableParam.Checked = d[0] > 0;
+        }
+
+        private void btnClearRecords_Click(object sender, EventArgs e)
+        {
+            master.WriteSingleRegister(1, 101, 0);
+            btnFetchBattCal_Click(sender, e);  // refresh value
+        }
+
+        private void chkEnableParam_CheckedChanged(object sender, EventArgs e)
+        {
+            master.WriteSingleRegister(1, 103, chkEnableParam.Checked ? (ushort)1 : (ushort)0);
         }
     }
 }
