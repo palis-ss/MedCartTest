@@ -122,7 +122,8 @@ namespace MedCartTest
                     MCMaster.WriteSingleRegister(1, 1, (ushort)(1 << (drawerno - 1)));  // Write a holding register address 1
                 }
                 else
-                    MessageBox.Show("Port not open");
+                    MessageBox.Show("MedCart not connected");
+
             }
             catch (Exception ex)
             {
@@ -132,6 +133,12 @@ namespace MedCartTest
 
         private void timer1_Tick(object sender, EventArgs e)
         {
+            if (MCSerialPort.IsOpen == false)  // should not happen
+            {
+                btnConnect_Click(sender, e);
+                return;
+            }
+
             ushort[] d = MCMaster.ReadInputRegisters(1, 52, 1);
             ushort nibble1 = (ushort)(d[0] >> 8);
             ushort nibble0 = (ushort)(d[0] & 0xFF);
@@ -165,6 +172,12 @@ namespace MedCartTest
 
         private void btnSendVolt_Click(object sender, EventArgs e)
         {
+            if (MCSerialPort.IsOpen == false)
+            {
+                MessageBox.Show("MedCart not connected");
+                return;
+            }
+
             MCMaster.WriteSingleRegister(1, 10000, (ushort)(spnVoltage.Value * 100));
 
             System.Threading.Thread.Sleep(100);
@@ -173,11 +186,16 @@ namespace MedCartTest
 
         private void btnFetchBattCal_Click(object sender, EventArgs e)
         {
+            if (MCSerialPort.IsOpen == false)
+            {
+                MessageBox.Show("MedCart not connected");
+                return;
+            }
             FetchBattCal();
         }
 
         void FetchBattCal()
-        { 
+        {
             ushort[] d = MCMaster.ReadInputRegisters(1, 10002, 1);
             lblBattRecords.Text = string.Format("Number of Records: {0}", d[0]);
 
@@ -198,12 +216,22 @@ namespace MedCartTest
 
         private void btnClearRecords_Click(object sender, EventArgs e)
         {
+            if (MCSerialPort.IsOpen == false)
+            {
+                MessageBox.Show("MedCart not connected");
+                return;
+            }
             MCMaster.WriteSingleRegister(1, 10001, 0);
             FetchBattCal();  // refresh value
         }
 
         private void chkEnableParam_CheckedChanged(object sender, EventArgs e)
         {
+            if (MCSerialPort.IsOpen == false)
+            {
+                MessageBox.Show("MedCart not connected");
+                return;
+            }
             MCMaster.WriteSingleRegister(1, 10003, chkEnableParam.Checked ? (ushort)1 : (ushort)0);
         }
 
@@ -280,15 +308,15 @@ namespace MedCartTest
             List<ushort> volts = new List<ushort> {
                 900, 1000, 1100, 1200, 1300};
 
-            if(MCSerialPort.IsOpen == false)
+            if (MCSerialPort.IsOpen == false)
             {
-                MessageBox.Show("Please connect to target board and try again");
+                MessageBox.Show("MedCart not connected");
                 return;
             }
 
             if (SupplySerialPort.IsOpen == false)
             {
-                MessageBox.Show("Please connect to power supply and try again");
+                MessageBox.Show("Power supply not connected");
                 return;
             }
 
@@ -301,11 +329,23 @@ namespace MedCartTest
             foreach (ushort vol in volts)
             {
                 SupplyMaster.WriteSingleRegister(1, CHARGER_SET_VOLTAGE_OFFSET, vol);
-                Thread.Sleep(500);
+                Thread.Sleep(2000);
                 MCMaster.WriteSingleRegister(1, 10000, vol);
                 Thread.Sleep(500);
             }
+            MCMaster.WriteSingleRegister(1, 10003, 1);
             FetchBattCal();
+        }
+
+        private void btnSetSupplyVoltage_Click(object sender, EventArgs e)
+        {
+            if (SupplySerialPort.IsOpen == false)
+            {
+                MessageBox.Show("Power supply not connected");
+                return;
+            }
+            ushort vol = (ushort)(spnVoltage.Value * 100);
+            SupplyMaster.WriteSingleRegister(1, CHARGER_SET_VOLTAGE_OFFSET, vol);
         }
     }
 }

@@ -46,13 +46,15 @@
             btnClearRecords = new Button();
             chkEnableParam = new CheckBox();
             groupBox2 = new GroupBox();
+            btnSetSupplyVoltage = new Button();
             btnSupplyPortRefresh = new Button();
             btnAutoRecord = new Button();
+            spnVoltage = new NumericUpDown();
             btnSupplyConnect = new Button();
             cbSupplyPort = new ComboBox();
             label3 = new Label();
-            spnVoltage = new NumericUpDown();
             btnMCPortRefresh = new Button();
+            groupBox3 = new GroupBox();
             groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numSpinner1).BeginInit();
             groupBox2.SuspendLayout();
@@ -161,17 +163,17 @@
             // 
             // btnSendVolt
             // 
-            btnSendVolt.Location = new Point(246, 64);
+            btnSendVolt.Location = new Point(246, 145);
             btnSendVolt.Name = "btnSendVolt";
-            btnSendVolt.Size = new Size(148, 44);
+            btnSendVolt.Size = new Size(148, 28);
             btnSendVolt.TabIndex = 13;
-            btnSendVolt.Text = "Send Voltage Value";
+            btnSendVolt.Text = "Send Voltage to Record";
             btnSendVolt.UseVisualStyleBackColor = true;
             btnSendVolt.Click += btnSendVolt_Click;
             // 
             // btnFetchBattCal
             // 
-            btnFetchBattCal.Location = new Point(30, 126);
+            btnFetchBattCal.Location = new Point(30, 175);
             btnFetchBattCal.Name = "btnFetchBattCal";
             btnFetchBattCal.Size = new Size(148, 40);
             btnFetchBattCal.TabIndex = 14;
@@ -182,7 +184,7 @@
             // lblBattRecords
             // 
             lblBattRecords.AutoSize = true;
-            lblBattRecords.Location = new Point(30, 188);
+            lblBattRecords.Location = new Point(30, 237);
             lblBattRecords.Name = "lblBattRecords";
             lblBattRecords.Size = new Size(12, 15);
             lblBattRecords.TabIndex = 15;
@@ -190,7 +192,7 @@
             // 
             // btnClearRecords
             // 
-            btnClearRecords.Location = new Point(246, 126);
+            btnClearRecords.Location = new Point(246, 313);
             btnClearRecords.Name = "btnClearRecords";
             btnClearRecords.Size = new Size(148, 40);
             btnClearRecords.TabIndex = 16;
@@ -201,7 +203,7 @@
             // chkEnableParam
             // 
             chkEnableParam.AutoSize = true;
-            chkEnableParam.Location = new Point(262, 184);
+            chkEnableParam.Location = new Point(260, 187);
             chkEnableParam.Name = "chkEnableParam";
             chkEnableParam.Size = new Size(118, 19);
             chkEnableParam.TabIndex = 17;
@@ -211,29 +213,40 @@
             // 
             // groupBox2
             // 
+            groupBox2.Controls.Add(btnSetSupplyVoltage);
             groupBox2.Controls.Add(btnSupplyPortRefresh);
             groupBox2.Controls.Add(btnAutoRecord);
-            groupBox2.Controls.Add(btnSupplyConnect);
-            groupBox2.Controls.Add(cbSupplyPort);
-            groupBox2.Controls.Add(label3);
             groupBox2.Controls.Add(spnVoltage);
             groupBox2.Controls.Add(chkEnableParam);
+            groupBox2.Controls.Add(btnSupplyConnect);
             groupBox2.Controls.Add(btnClearRecords);
             groupBox2.Controls.Add(lblBattRecords);
+            groupBox2.Controls.Add(cbSupplyPort);
             groupBox2.Controls.Add(lblBattInfo);
             groupBox2.Controls.Add(btnFetchBattCal);
+            groupBox2.Controls.Add(label3);
             groupBox2.Controls.Add(btnSendVolt);
             groupBox2.Location = new Point(488, 12);
             groupBox2.Name = "groupBox2";
             groupBox2.Size = new Size(448, 370);
             groupBox2.TabIndex = 18;
             groupBox2.TabStop = false;
-            groupBox2.Text = "Battery Operations";
+            groupBox2.Text = "Battery Functions";
+            // 
+            // btnSetSupplyVoltage
+            // 
+            btnSetSupplyVoltage.Location = new Point(246, 107);
+            btnSetSupplyVoltage.Name = "btnSetSupplyVoltage";
+            btnSetSupplyVoltage.Size = new Size(148, 30);
+            btnSetSupplyVoltage.TabIndex = 21;
+            btnSetSupplyVoltage.Text = "Set Supply Voltage";
+            btnSetSupplyVoltage.UseVisualStyleBackColor = true;
+            btnSetSupplyVoltage.Click += btnSetSupplyVoltage_Click;
             // 
             // btnSupplyPortRefresh
             // 
             btnSupplyPortRefresh.Font = new Font("Wingdings 3", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            btnSupplyPortRefresh.Location = new Point(413, 275);
+            btnSupplyPortRefresh.Location = new Point(372, 59);
             btnSupplyPortRefresh.Name = "btnSupplyPortRefresh";
             btnSupplyPortRefresh.Size = new Size(29, 23);
             btnSupplyPortRefresh.TabIndex = 20;
@@ -243,7 +256,7 @@
             // 
             // btnAutoRecord
             // 
-            btnAutoRecord.Location = new Point(246, 313);
+            btnAutoRecord.Location = new Point(246, 258);
             btnAutoRecord.Name = "btnAutoRecord";
             btnAutoRecord.Size = new Size(148, 40);
             btnAutoRecord.TabIndex = 20;
@@ -251,9 +264,20 @@
             btnAutoRecord.UseVisualStyleBackColor = true;
             btnAutoRecord.Click += btnAutoRecord_Click;
             // 
+            // spnVoltage
+            // 
+            spnVoltage.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
+            spnVoltage.Location = new Point(120, 121);
+            spnVoltage.Maximum = new decimal(new int[] { 14, 0, 0, 0 });
+            spnVoltage.Minimum = new decimal(new int[] { 9, 0, 0, 0 });
+            spnVoltage.Name = "spnVoltage";
+            spnVoltage.Size = new Size(102, 36);
+            spnVoltage.TabIndex = 18;
+            spnVoltage.Value = new decimal(new int[] { 9, 0, 0, 0 });
+            // 
             // btnSupplyConnect
             // 
-            btnSupplyConnect.Location = new Point(367, 246);
+            btnSupplyConnect.Location = new Point(291, 58);
             btnSupplyConnect.Name = "btnSupplyConnect";
             btnSupplyConnect.Size = new Size(75, 23);
             btnSupplyConnect.TabIndex = 19;
@@ -264,7 +288,7 @@
             // cbSupplyPort
             // 
             cbSupplyPort.FormattingEnabled = true;
-            cbSupplyPort.Location = new Point(227, 246);
+            cbSupplyPort.Location = new Point(138, 59);
             cbSupplyPort.Name = "cbSupplyPort";
             cbSupplyPort.Size = new Size(121, 23);
             cbSupplyPort.TabIndex = 19;
@@ -272,22 +296,11 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(227, 228);
+            label3.Location = new Point(30, 64);
             label3.Name = "label3";
             label3.Size = new Size(99, 15);
             label3.TabIndex = 19;
             label3.Text = "Supply Serial Port";
-            // 
-            // spnVoltage
-            // 
-            spnVoltage.Font = new Font("Segoe UI", 16F, FontStyle.Regular, GraphicsUnit.Point);
-            spnVoltage.Location = new Point(108, 65);
-            spnVoltage.Maximum = new decimal(new int[] { 14, 0, 0, 0 });
-            spnVoltage.Minimum = new decimal(new int[] { 9, 0, 0, 0 });
-            spnVoltage.Name = "spnVoltage";
-            spnVoltage.Size = new Size(120, 36);
-            spnVoltage.TabIndex = 18;
-            spnVoltage.Value = new decimal(new int[] { 9, 0, 0, 0 });
             // 
             // btnMCPortRefresh
             // 
@@ -299,6 +312,15 @@
             btnMCPortRefresh.Text = "Q";
             btnMCPortRefresh.UseVisualStyleBackColor = true;
             btnMCPortRefresh.Click += btnMCPortRefresh_Click;
+            // 
+            // groupBox3
+            // 
+            groupBox3.Location = new Point(12, 12);
+            groupBox3.Name = "groupBox3";
+            groupBox3.Size = new Size(457, 370);
+            groupBox3.TabIndex = 20;
+            groupBox3.TabStop = false;
+            groupBox3.Text = "MedCart Functions";
             // 
             // Form1
             // 
@@ -314,6 +336,7 @@
             Controls.Add(btnMCConnect);
             Controls.Add(cbMCPort);
             Controls.Add(groupBox2);
+            Controls.Add(groupBox3);
             Name = "Form1";
             Text = "MedCart Protocol Test";
             FormClosing += Form1_FormClosing;
@@ -354,5 +377,7 @@
         private Button btnAutoRecord;
         private Button btnSupplyPortRefresh;
         private Button btnMCPortRefresh;
+        private Button btnSetSupplyVoltage;
+        private GroupBox groupBox3;
     }
 }
